@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- smart btn -->
+    <record
+    id="view_your_model_form_inherit"
+    model="ir.ui.view">
+        <field name="name">view.github.repository.form.inherit</field>
+        <field name="model">github.repository</field>
+        <field
+        name="inherit_id"
+        ref="github_connector.view_github_repository_form" />
+        <field
+        name="arch"
+        type="xml">
+            <xpath
+            expr="//header"
+            position="inside">
+                <button
+                name="button_sync_pull_request"
+                type="object"
+                string="Pull Requests Sync."
+                class="btn btn-default"
+                icon="fa-chevron-right"
+                groups="github_connector.group_github_connector_manager" />
+            </xpath>
+            <xpath
+            expr="//div[@name='button_box']//button[last()]"
+            position="after">
+                <button
+                type="object"
+                class="oe_stat_button"
+                icon="fa-code-pull-request"
+                name="action_github_pull_requests"
+                attrs="{'invisible': [('repository_branch_qty', '=', False)]}">
+                    <div class="o_stat_info">
+                        <field
+                        name="repository_pr_qty"
+                        class="o_stat_value" />
+                        <span
+                        class="o_stat_text"
+                        attrs="{'invisible': [('repository_pr_qty', '&lt;', 2)]}"> Pull Requests</span>
+                        <span
+                        class="o_stat_text"
+                        attrs="{'invisible': [('repository_pr_qty', '&gt;', 1)]}"> Pull Request</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    <!-- tree view -->
+    <record
+    model="ir.ui.view"
+    id="view_github_pull_request_tree">
+        <field name="name">github.pull.request.tree</field>
+        <field name="model">github.pull.request</field>
+        <field
+        name="arch"
+        type="xml">
+            <tree>
+                <field name="name" />
+                <field name="gh_repository_id" />
+                <field name="pr_user" />
+                <field name="github_url" />
+                <field
+                name="pr_head_url"
+                optional="hide" />
+                <field name="pr_title" />
+                <field name="pr_description" />
+            </tree>
+        </field>
+    </record>
+    <!-- form view -->
+    <record
+    model="ir.ui.view"
+    id="view_github_pull_request_form">
+        <field name="name">github.pull.request.form</field>
+        <field name="model">github.pull.request</field>
+        <field
+        name="arch"
+        type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="gh_repository_id" />
+                        <field name="pr_user" />
+                        <field name="github_url" />
+                        <field name="pr_head_url" />
+                        <field name="pr_title" />
+                        <field name="pr_description" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- search view  -->
+    <record
+    model="ir.ui.view"
+    id="view_github_pull_request_search">
+        <field name="name">github.pull.request.search</field>
+        <field name="model">github.pull.request</field>
+        <field
+        name="arch"
+        type="xml">
+            <search>
+                <field
+                name="name"
+                string="Name"
+                filter_domain="[('name', 'ilike', self)]" />
+                <field
+                name="pr_title"
+                string="Pull Request Title"
+                filter_domain="[('pr_title', 'ilike', self)]" />
+                <field
+                name="pr_user"
+                string="Pull Request User"
+                filter_domain="[('pr_user', 'ilike', self)]" />
+                <field
+                name="gh_repository_id"
+                string="Repository"
+                filter_domain="[('gh_repository_id', '=', self)]"
+                context="{'search_default_group_by': 1}" />
+            </search>
+        </field>
+    </record>
+    <record
+    id="action_github_repository_pull_request"
+    model="ir.actions.act_window">
+        <field name="name">Repository Pull Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">github.pull.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
