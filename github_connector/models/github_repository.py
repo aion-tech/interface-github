@@ -79,6 +79,12 @@ class GithubRepository(models.Model):
         string="Analysis Rules", comodel_name="github.analysis.rule"
     )
 
+    def name_get(self):
+        res = []
+        for repository in self:
+            res.append((repository.id, repository.complete_name))
+        return res
+
     # Compute Section
     @api.depends("organization_id.ignored_repository_names")
     def _compute_ignore(self):
