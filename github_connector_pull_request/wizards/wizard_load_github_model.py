@@ -1,3 +1,6 @@
+#  Copyright 2023 Simone Rubino - Aion Tech
+#  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 from odoo import fields, models
 
 
@@ -5,25 +8,19 @@ class WizardLoadGithubModel(models.TransientModel):
     _inherit = "wizard.load.github.model"
 
     github_type = fields.Selection(
-        selection_add=[("pr", "Pull Request")],
+        selection_add=[("pr", "Pull Request URL")],
         ondelete={"pr": "cascade"},
-    )
-    repository_id = fields.Many2one(
-        "github.repository",
-        string="Github Repository",
     )
 
     def button_create_from_github(self):
-        for wizard in self:
-            if wizard.github_type == "pr":
-                github_model = self.env["github.pull.request"]
-                ctx = self.env.context.copy()
-                ctx.update(repository_id=wizard.repository_id)
-                # TODO create / update
-                my_obj = github_model.with_context(ctx).create_from_name(wizard.name)
-                # TODO - does child_update make sense for PRs?
-                # if wizard.child_update:
-                #     my_obj.update_from_github(True)
+        pull_request_model = self.env["github.pull_request"]
+        pull_request_wizards = self.filtered(lambda w: w.github_type == "pr")
+        for wizard in pull_request_wizards:
+            pr_url = wizard.name
+            pull_request_model.create_from_name(
+                pr_url,
+            )
 
-            else:
-                super().button_create_from_github()
+        return super(
+            WizardLoadGithubModel, self - pull_request_wizards
+        ).button_create_from_github()

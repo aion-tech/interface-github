@@ -1,2 +1,4 @@
-from . import common
-from . import test_foo
+#  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+from . import test_repository
+from . import test_wizard_load

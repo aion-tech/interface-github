@@ -1,17 +1,20 @@
+#  Copyright 2023 Simone Rubino - Aion Tech
+#  License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 {
-    "name": "github_connector_pull_request",
-    "summary": "Extend OCA's github_connector by adding a pull request model",
-    "description": "",
-    "website": "https://aion-tech.it/",
-    # https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
-    "category": "Uncategorized",
+    "name": "Github Connector - Pull Requests",
+    "summary": "Manage Pull Requests",
+    "website": "https://github.com/OCA/interface-github",
+    "category": "Connector",
+    "license": "AGPL-3",
     "version": "14.0.1.0.0",
+    "author": "Aion Tech, Odoo Community Association (OCA)",
     "depends": [
         "github_connector",
     ],
     "data": [
         "security/ir.model.access.csv",
-        "views/pull_request_views.xml",
-        "wizards/view_wizard_load_github_model.xml",
+        "views/github_pull_request_views.xml",
+        "views/github_repository_views.xml",
     ],
 }
